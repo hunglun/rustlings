@@ -38,12 +38,31 @@ impl Default for Person {
 // 5. Extract the other element from the split operation and parse it into a
 //    `usize` as the age.
 // If while parsing the age, something goes wrong, then return the default of
-// Person Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
 
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+        if s.len() == 0 { return Person::default() }
+        else {
+            let mut parts = s.split(",");
+            let name = parts.next();
+        
+            if Some("") == name {Person::default()}
+            else{
+                if let Some(age) = parts.next(){
+                    if None != parts.next() {
+                        return Person::default()
+                    }
+                    match age.parse::<usize>(){
+                      Err(_) => Person::default(),
+                      Ok(value) =>  Person{name : name.unwrap().to_string(), age: value  }
+                    } 
+                }else{
+                    Person::default()
+                }
+            }
+            
+        }
     }
 }
 
